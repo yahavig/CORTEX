@@ -1,0 +1,192 @@
+@import "tailwindcss";
+
+/* SF Pro for Latin, SF Hebrew for Hebrew. Both are variable fonts (weight + optical size),
+   served by the local server from /Library/Fonts. When faces overlap, the browser tries the
+   one declared last first, so SF Hebrew wins for Hebrew characters. */
+@font-face {
+  font-family: "CORTEX Sans";
+  src: url("/fonts/sf-pro.ttf") format("truetype");
+  font-weight: 1 1000;
+  font-display: block;
+}
+@font-face {
+  font-family: "CORTEX Sans";
+  src: url("/fonts/sf-hebrew.ttf") format("truetype");
+  font-weight: 1 1000;
+  font-display: block;
+  unicode-range: U+0590-05FF, U+FB1D-FB4F, U+20AA;
+}
+
+/* Semantic color tokens. Light and dark follow the system appearance (HIG: no in-app
+   appearance switch). Text tokens are checked for >= 4.5:1 on every surface they sit on. */
+:root {
+  color-scheme: light;
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --elevated: #ffffff;
+  --fill: rgb(120 120 128 / 0.12);
+  --fill-strong: rgb(120 120 128 / 0.2);
+  --fill-hover: rgb(120 120 128 / 0.08);
+  --line: rgb(60 60 67 / 0.16);
+  --line-strong: rgb(60 60 67 / 0.32);
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --glass: rgb(255 255 255 / 0.7);
+  --scrim: rgb(0 0 0 / 0.25);
+  /* One accent (apple.com): Action Blue. --accent fills buttons, --tint colors text/icons/focus. */
+  --accent: #0066cc; /* white text 5.6:1 */
+  --neon-pink: #c2185b;
+  --neon-orange: #a85100;
+  --neon-green: #1d7a35;
+  --neon-blue: #0062c4;
+  --tint: #0066cc; /* 5.1:1 on #f5f5f7 */
+  --field: #ffffff;
+  --selected: #ffffff; /* selected segment */
+  --card-shadow: 0 0 0 0.5px rgb(0 0 0 / 0.04), 0 1px 3px rgb(0 0 0 / 0.06);
+  --raised-shadow: 0 1px 2px rgb(0 0 0 / 0.12), 0 0 0 0.5px rgb(0 0 0 / 0.06);
+  --glass-blur: blur(30px) saturate(1.4);
+  --glow-a: transparent;
+  --glow-b: transparent;
+  --chart-income: #1a73e8;
+  --chart-expense: #d6246e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0a0a0c;
+    --surface: #141417;
+    --elevated: #1c1c1f;
+    --fill: rgb(120 120 128 / 0.24);
+    --fill-strong: rgb(120 120 128 / 0.36);
+    --fill-hover: rgb(120 120 128 / 0.16);
+    --line: rgb(84 84 88 / 0.45);
+    --line-strong: rgb(84 84 88 / 0.75);
+    --ink: #f5f5f7;
+    --muted: #98989d;
+    --glass: rgb(28 28 31 / 0.6);
+    --scrim: rgb(0 0 0 / 0.55);
+    --neon-pink: #ff5aa8;
+    --neon-orange: #ff9f0a;
+    --neon-green: #30d158;
+    --neon-blue: #3aa5ff;
+    --accent: #0071e3; /* white text 4.7:1 */
+    --tint: #2997ff; /* 6.6:1 on #0a0a0c, 5.6:1 on #1c1c1f */
+    --field: rgb(255 255 255 / 0.06);
+    --selected: rgb(120 120 128 / 0.42);
+    --card-shadow: inset 0 0 0 0.5px rgb(255 255 255 / 0.04);
+    --raised-shadow: 0 1px 2px rgb(0 0 0 / 0.4);
+    --glow-a: rgb(128 56 250 / 0.14);
+    --glow-b: rgb(41 158 255 / 0.08);
+    --chart-income: #1e8ef5;
+    --chart-expense: #ec3191;
+  }
+}
+
+@theme inline {
+  --font-sans: "CORTEX Sans", -apple-system, system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, monospace;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-elevated: var(--elevated);
+  --color-fill: var(--fill);
+  --color-fill-strong: var(--fill-strong);
+  --color-fill-hover: var(--fill-hover);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-glass: var(--glass);
+  --color-scrim: var(--scrim);
+  --color-accent: var(--accent);
+  --color-neon-pink: var(--neon-pink);
+  --color-neon-orange: var(--neon-orange);
+  --color-neon-green: var(--neon-green);
+  --color-neon-blue: var(--neon-blue);
+  --color-tint: var(--tint);
+  --color-field: var(--field);
+  --color-selected: var(--selected);
+
+  /* Type scale from apple.com (getdesign.md/apple, references/apple-design-source.md):
+     display-lg 40, lead 28, tagline 21, body-strong 17, body 17, caption 14, fine-print 12.
+     Weights 400 / 600 only. Tight tracking as on apple.com. */
+  --text-large-title: 40px;          /* display-lg */
+  --text-large-title--line-height: 44px;
+  --text-title1: 28px;               /* lead */
+  --text-title1--line-height: 32px;
+  --text-title1--letter-spacing: 0.007em;
+  --text-title2: 21px;               /* tagline */
+  --text-title2--line-height: 25px;
+  --text-title2--letter-spacing: 0.011em;
+  --text-title3: 17px;               /* body-strong */
+  --text-title3--line-height: 21px;
+  --text-title3--letter-spacing: -0.022em;
+  --text-body: 17px;                 /* body */
+  --text-body--line-height: 25px;
+  --text-body--letter-spacing: -0.022em;
+  --text-callout: 14px;              /* caption */
+  --text-callout--line-height: 20px;
+  --text-callout--letter-spacing: -0.016em;
+  --text-subheadline: 12px;          /* fine-print */
+  --text-subheadline--line-height: 16px;
+  --text-subheadline--letter-spacing: -0.01em;
+  --text-document: 17px;             /* long-form editing: body size, a little more air */
+  --text-document--line-height: 27px;
+  --text-document--letter-spacing: -0.022em;
+
+  /* apple.com radius scale: xs 5, sm 8, md 11, lg 18, pill. */
+  --radius-xs: 5px;
+  --radius-sm: 8px;
+  --radius-md: 11px;
+  --radius-lg: 18px;
+}
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+/* Soft neon glass blobs, like the reel background. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(40rem 30rem at 85% -10%, var(--glow-a), transparent 70%),
+    radial-gradient(35rem 28rem at 0% 110%, var(--glow-b), transparent 70%);
+}
+
+/* No chrome shadows (apple.com): cards separate by surface color and a hairline. */
+
+/* Functional layer (sidebar, toolbar, sheets): the only places with glass (liquid-glass.md). */
+.glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: var(--glass-blur);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* Visible keyboard focus everywhere (accessibility.md). */
+:focus-visible {
+  outline: 2px solid var(--tint); /* >= 3:1 against every surface in both modes */
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline-offset: 0; }
+
+/* Accessibility states (liquid-glass.md › Review checklist 5). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass { background: var(--elevated); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+@media (prefers-contrast: more) {
+  :root { --line: rgb(60 60 67 / 0.45); --line-strong: rgb(60 60 67 / 0.7); --muted: #545458; }
+}
+@media (prefers-contrast: more) and (prefers-color-scheme: dark) {
+  :root { --line: rgb(235 235 245 / 0.35); --line-strong: rgb(235 235 245 / 0.6); --muted: #c7c7cc; }
+}
