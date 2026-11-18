@@ -6,6 +6,7 @@ import { rest } from '../../lib/rest.ts';
 import { addDays, fmtDay } from '../../lib/time.ts';
 import { Sym } from '../../components/Sym.tsx';
 import { MonthlyChart } from './MonthlyChart.tsx';
+import { nextDeadlines } from '../../../shared/obligations.ts';
 
 export interface Summary {
   year: number;
@@ -22,7 +23,7 @@ export interface Summary {
   issues: { missingRates: number; missingReceipts: number; missingFiles: number };
 }
 
-// Next due dates for tax advances (15th) and the annual report.
+// Next due dates: tax advances (15th) and the fixed yearly dates from shared/obligations.ts.
 function obligations(tax: TaxSettings) {
   const now = new Date();
   const out: { label: string; at: Date }[] = [];
@@ -32,8 +33,8 @@ function obligations(tax: TaxSettings) {
     if (tax.advanceFrequency === 'bimonthly' && d.getMonth() % 2 !== 0) continue; // Jan, Mar, May…
     out.push({ label: 'מקדמות מס הכנסה וביטוח לאומי', at: d });
   }
-  const report = new Date(now.getFullYear(), 3, 30);
-  out.push({ label: `דוח שנתי לשנת ${now.getFullYear() - (now < report ? 1 : 0)} (לבדוק מועד מדויק מול רו״ח)`, at: now < report ? report : new Date(now.getFullYear() + 1, 3, 30) });
+  for (const d of nextDeadlines(now)) if (d.days <= 120) out.push({ label: d.label, at: d.at });
+  out.sort((a, b) => a.at.getTime() - b.at.getTime());
   return out;
 }
 

@@ -7,14 +7,16 @@ import { Expenses } from './Expenses.tsx';
 import { Deals } from './Deals.tsx';
 import { Contacts } from './Contacts.tsx';
 import { TaxSettingsPanel } from './TaxSettingsPanel.tsx';
+import { Obligations } from './Obligations.tsx';
 
-type Tab = 'overview' | 'income' | 'expenses' | 'deals' | 'contacts' | 'tax';
+type Tab = 'overview' | 'income' | 'expenses' | 'deals' | 'contacts' | 'obligations' | 'tax';
 const TABS: { value: Tab; label: string }[] = [
   { value: 'overview', label: 'סקירה' },
   { value: 'income', label: 'הכנסות' },
   { value: 'expenses', label: 'הוצאות' },
   { value: 'deals', label: 'שיתופי פעולה' },
   { value: 'contacts', label: 'מותגים ואנשי קשר' },
+  { value: 'obligations', label: 'חובות מס' },
   { value: 'tax', label: 'מס והגדרות' },
 ];
 
@@ -40,6 +42,7 @@ export function BusinessView() {
       {tab === 'expenses' && <Expenses year={year} />}
       {tab === 'deals' && <Deals />}
       {tab === 'contacts' && <Contacts />}
+      {tab === 'obligations' && <Obligations />}
       {tab === 'tax' && <TaxSettingsPanel />}
     </div>
   );

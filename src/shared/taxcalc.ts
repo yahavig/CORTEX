@@ -16,11 +16,24 @@ export interface TaxEstimate {
   marginalRate: number;
 }
 
-export function bituachLeumi(annualProfit: number, s: TaxSettings) {
+// Annual BL + health on profit, at the reduced rate up to the reduced ceiling and the full
+// rate up to the maximum insurable income (monthly figures).
+function tiered(annualProfit: number, s: TaxSettings, reducedRate: number, fullRate: number) {
   const monthly = Math.max(0, annualProfit) / 12;
-  const reduced = Math.min(monthly, s.blReducedCeiling) * s.blReducedRate;
-  const full = Math.max(0, Math.min(monthly, s.blMaxIncome) - s.blReducedCeiling) * s.blFullRate;
+  const reduced = Math.min(monthly, s.blReducedCeiling) * reducedRate;
+  const full = Math.max(0, Math.min(monthly, s.blMaxIncome) - s.blReducedCeiling) * fullRate;
   return (reduced + full) * 12;
+}
+
+export function bituachLeumi(annualProfit: number, s: TaxSettings) {
+  return tiered(annualProfit, s, s.blReducedRate, s.blFullRate);
+}
+
+// The deduction applies to the national-insurance part only, not to health insurance.
+// Without the split rates (older saved settings) fall back to the whole payment.
+export function bituachLeumiNi(annualProfit: number, s: TaxSettings) {
+  if (s.blReducedNiRate == null || s.blFullNiRate == null) return bituachLeumi(annualProfit, s);
+  return tiered(annualProfit, s, s.blReducedNiRate, s.blFullNiRate);
 }
 
 export function bracketTax(taxable: number, s: TaxSettings) {
@@ -41,7 +54,7 @@ export function bracketTax(taxable: number, s: TaxSettings) {
 export function estimateTax(annualProfit: number, s: TaxSettings): TaxEstimate {
   const profit = Math.max(0, annualProfit);
   const bl = bituachLeumi(profit, s);
-  const taxable = Math.max(0, profit - bl * s.blDeductibleShare);
+  const taxable = Math.max(0, profit - bituachLeumiNi(profit, s) * s.blDeductibleShare);
   const { tax, marginal } = bracketTax(taxable, s);
   const credits = s.creditPoints * s.creditPointValue;
   const incomeTax = Math.max(0, tax - credits);

@@ -61,7 +61,7 @@ export function TaxSettingsPanel() {
 
       <Card className="lg:col-span-2">
         <h3 className="mb-1 text-title3 font-semibold">פרמטרים של החוק</h3>
-        <p className="mb-4 text-subheadline text-muted">ערכי ברירת המחדל הם של 2025 (מדרגות המס ונקודות הזיכוי מוקפאות עד 2027). כדאי לוודא מול רו״ח בתחילת כל שנה.</p>
+        <p className="mb-4 text-subheadline text-muted">ערכי ברירת המחדל הם של 2026, נבדקו ב־18.11.2026 (המקורות בלשונית ״חובות״). מדרגות 20% ו־31% הורחבו במרץ 2026. כדאי לוודא מול רו״ח בתחילת כל שנה.</p>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {num('paturCeiling', 'תקרת עוסק פטור ₪')}
           {num('vatRate', 'שיעור מע״מ', '0.18')}
@@ -70,6 +70,8 @@ export function TaxSettingsPanel() {
           {num('blReducedCeiling', 'ב״ל: תקרת שיעור מופחת ₪/חודש')}
           {num('blReducedRate', 'ב״ל: שיעור מופחת')}
           {num('blFullRate', 'ב״ל: שיעור מלא')}
+          {num('blReducedNiRate', 'ב״ל בלי בריאות: מופחת', 'לניכוי')}
+          {num('blFullNiRate', 'ב״ל בלי בריאות: מלא', 'לניכוי')}
           {num('blMaxIncome', 'ב״ל: הכנסה מרבית ₪/חודש')}
         </div>
         <h4 className="mb-2 mt-5 text-callout text-muted">מדרגות מס הכנסה (שנתי)</h4>

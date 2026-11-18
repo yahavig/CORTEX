@@ -56,8 +56,9 @@ export const TASK_AREAS = ['content', 'business', 'admin', 'personal'] as const;
 export type TaskArea = (typeof TASK_AREAS)[number];
 export const TASK_AREA_LABELS: Record<TaskArea, string> = { content: 'תוכן', business: 'עסק', admin: 'מנהלה ומס', personal: 'אישי' };
 
-// Tax model parameters. Values are the 2025 figures (frozen by law through 2027 for brackets
-// and credit points). Editable in the UI; verify each January with the accountant.
+// Tax model parameters for 2026, verified 2026-11-18 (sources in shared/obligations.ts).
+// Brackets: the 20% and 31% brackets were widened by law in March 2026, retroactive to January.
+// Editable in the UI; verify each January with the accountant.
 export interface TaxSettings {
   year: number;
   businessType: 'patur' | 'murshe';
@@ -70,6 +71,8 @@ export interface TaxSettings {
   blMaxIncome: number; // monthly maximum insurable income
   blReducedRate: number; // BL + health, reduced tier
   blFullRate: number; // BL + health, full tier
+  blReducedNiRate?: number; // national-insurance part of the reduced tier (no health)
+  blFullNiRate?: number; // national-insurance part of the full tier (no health)
   blDeductibleShare: number; // share of BL (non-health) payments deductible from taxable income
   advanceTaxMonthly: number; // מקדמות מס הכנסה you pay now
   advanceBlMonthly: number; // מקדמות ביטוח לאומי you pay now
@@ -79,23 +82,25 @@ export interface TaxSettings {
 export const DEFAULT_TAX: TaxSettings = {
   year: 2026,
   businessType: 'patur',
-  paturCeiling: 120_000,
+  paturCeiling: 122_833,
   vatRate: 0.18,
   creditPoints: 2.25,
   creditPointValue: 2_904,
   brackets: [
     { upTo: 84_120, rate: 0.1 },
     { upTo: 120_720, rate: 0.14 },
-    { upTo: 193_800, rate: 0.2 },
-    { upTo: 269_280, rate: 0.31 },
+    { upTo: 228_000, rate: 0.2 },
+    { upTo: 301_200, rate: 0.31 },
     { upTo: 560_280, rate: 0.35 },
     { upTo: 721_560, rate: 0.47 },
     { upTo: null, rate: 0.5 },
   ],
-  blReducedCeiling: 7_522,
-  blMaxIncome: 50_695,
-  blReducedRate: 0.0597,
-  blFullRate: 0.1783,
+  blReducedCeiling: 7_703,
+  blMaxIncome: 51_910,
+  blReducedRate: 0.077,
+  blFullRate: 0.18,
+  blReducedNiRate: 0.0447,
+  blFullNiRate: 0.1283,
   blDeductibleShare: 0.52,
   advanceTaxMonthly: 0,
   advanceBlMonthly: 0,
